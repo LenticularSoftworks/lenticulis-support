@@ -41,17 +41,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../headers;../../dep_include/;../../dep_include/magick;../../dep_include/magick++</IncludePath>
     <LibraryPath>../../lib/$(Configuration)/$(PlatformShortName)/;$(LibraryPath)</LibraryPath>
+    <OutDir>../../lenticulis-gui/bin/$(Configuration)/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../headers;../../dep_include/;../../dep_include/magick;../../dep_include/magick++</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../headers;../../dep_include/;../../dep_include/magick;../../dep_include/magick++/</IncludePath>
     <LibraryPath>../../lib/$(Configuration)/$(PlatformShortName)/;$(LibraryPath)</LibraryPath>
+    <OutDir>../../lenticulis-gui/bin/$(Configuration)/</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
