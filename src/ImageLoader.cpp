@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "ImageLoader.h"
 
 const int ImageLoader::MIPMAP_SIZE = 768;
@@ -9,30 +11,30 @@ const int IMAGE_DEPTH_UNSUPPORTED = 4;
 const int IMAGE_FORMAT_UNSUPPORTED = 5;
 
 // ImageLoader implementation
-int ImageLoader::registerImage(std::string fileName) {
+int ImageLoader::registerImage(char* fileName) {
 	// TODO
 	return 0;
 }
 
-int registerImageP(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
+int registerImageP(char* fileName, char** format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
 	// TODO
 	return 0;
 }
 
 
-int ImageLoader::getImageId(std::string fileName) {
+int ImageLoader::getImageId(char* fileName) {
 	// TODO
 	return 0;
 }
 
-std::string ImageLoader::getImageFileName(int id) {
+const char* ImageLoader::getImageFileName(int id) {
 	// TODO
-	return "";
+	return std::string("").c_str();
 }
 
-std::string ImageLoader::getImageFormat(int id) {
+const char* ImageLoader::getImageFormat(int id) {
 	// TODO
-	return "";
+	return std::string("").c_str();
 }
 
 int ImageLoader::getImageColorSpace(int id) {
@@ -40,12 +42,12 @@ int ImageLoader::getImageColorSpace(int id) {
 	return 0;
 }
 
-size_t ImageLoader::getImageWidth(int id) {
+unsigned int ImageLoader::getImageWidth(int id) {
 	// TODO
 	return 0;
 }
 
-size_t ImageLoader::getImageHeight(int id) {
+unsigned int ImageLoader::getImageHeight(int id) {
 	// TODO
 	return 0;
 }

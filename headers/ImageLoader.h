@@ -61,17 +61,17 @@ namespace ImageLoader {
 	extern "C" DLL_PUBLIC const int IMAGE_FORMAT_UNSUPPORTED;
 
 	// Image registering and retrieving (frontend)
-	extern "C" DLL_PUBLIC int registerImage(std::string fileName);
-	extern "C" DLL_PUBLIC int registerImageP(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap);
+	extern "C" DLL_PUBLIC int registerImage(char* fileName);
+	extern "C" DLL_PUBLIC int registerImageP(char* fileName, char** format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap);
 
 	// ImageInfo attributes retrieving (frontend)
 	// Will return NULL on not registered image
-	extern "C" DLL_PUBLIC int getImageId(std::string fileName);
-	extern "C" DLL_PUBLIC std::string getImageFileName(int id);
-	extern "C" DLL_PUBLIC std::string getImageFormat(int id);
+	extern "C" DLL_PUBLIC int getImageId(char* fileName);
+	extern "C" DLL_PUBLIC const char* getImageFileName(int id);
+	extern "C" DLL_PUBLIC const char* getImageFormat(int id);
 	extern "C" DLL_PUBLIC int getImageColorSpace(int id);
-	extern "C" DLL_PUBLIC size_t getImageWidth(int id);
-	extern "C" DLL_PUBLIC size_t getImageHeight(int id);
+	extern "C" DLL_PUBLIC unsigned int getImageWidth(int id);
+	extern "C" DLL_PUBLIC unsigned int getImageHeight(int id);
 	extern "C" DLL_PUBLIC void* getImageMipmap(int id);
 
 	// List of registered images
