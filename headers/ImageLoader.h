@@ -3,106 +3,86 @@
 
 #include <iostream>
 #include <string>
-
 #include <Magick++.h>
 
-/*
- * Crate to store information about registered image
- *
- */
-class ImageInfo {
-	public:
-		// Getters (backend)
-		int getId();
-		std::string getFileName();
-		std::string getFormat();
-		Magick::ColorspaceType getColorSpace();
-		size_t getWidth();
-		size_t getHeight();
-		Magick::Image* getMipmap();
+#include "Defs.h"
 
-		// Setters (backend)
-		void setFileName(std::string fileName);
+namespace ImageLoader {
 
-		// Constructor (backend)
-		ImageInfo(	int id, 
-				std::string fileName,
-				std::string format,
-				Magick::ColorspaceType colorSpace,
-				size_t width,
-				size_t height,
-				Magick::Image* mipmap );
-	private:
-		int id;					// Image identifier (backend)
-		std::string fileName;			// Image file name (backend)
-		std::string format;			// Image format in string (backend)
-		Magick::ColorspaceType colorSpace;  	// Image color space, eg. "CMYK" (backend)
-		size_t width;				// Original image width (backend)
-		size_t height;				// Original image height (backend)
-		Magick::Image* mipmap;			// Generated mipmap for image (backend)
-};
+	/*
+	 * Crate to store information about registered image
+	 *
+	 */
+	class ImageInfo {
+		public:
+			// Getters (backend)
+			int getId();
+			std::string getFileName();
+			std::string getFormat();
+			Magick::ColorspaceType getColorSpace();
+			size_t getWidth();
+			size_t getHeight();
+			Magick::Image* getMipmap();
 
-/*
- * Singleton service for registering images into backend and retrieving 
- * info about registered images. Aslo this class is used to load original
- * images from file.
- *
- */
-class ImageLoader {
-	public:
-		// Configuration constants
-		static const int MIPMAP_SIZE = 768;
+			// Setters (backend)
+			void setFileName(std::string fileName);
 
-		// Constants defining return codes (frontend)
-		static const int IMAGE_OK = 1;
-		static const int IMAGE_NOT_FOUND = 2;
-		static const int IMAGE_CORRUPTED = 3;
-		static const int IMAGE_DEPTH_UNSUPPORTED = 4;
-		static const int IMAGE_FORMAT_UNSUPPORTED = 5;
+			// Constructor (backend)
+			ImageInfo(	int id, 
+					std::string fileName,
+					std::string format,
+					Magick::ColorspaceType colorSpace,
+					size_t width,
+					size_t height,
+					Magick::Image* mipmap );
+		private:
+			int id;					// Image identifier (backend)
+			std::string fileName;			// Image file name (backend)
+			std::string format;			// Image format in string (backend)
+			Magick::ColorspaceType colorSpace;  	// Image color space, eg. "CMYK" (backend)
+			size_t width;				// Original image width (backend)
+			size_t height;				// Original image height (backend)
+			Magick::Image* mipmap;			// Generated mipmap for image (backend)
+	};
 
-		// Get singleton instance (frontend/backend)
-		static ImageLoader& instance() {
-			static ImageLoader instance;
-			return instance;
-		};
+	/*
+ 	 * ImageInfo registering and retrieving attributtes about registered images
+ 	 *
+ 	 */
 
-		// Image registering and retrieving (frontend)
-		int registerImage(std::string fileName);
+	// Configuration constants (frontend/backend)
+	extern "C" DLL_PUBLIC const int MIPMAP_SIZE;
 
-		// Register image and instantly fill it's 
-		// attributes into variables given as parameter
-		int registerImage(	std::string fileName,
-					std::string* format,
-					int* colorSpace,
-					size_t* width,
-					size_t* height,
-					void* mipmap );
+	// Constants defining return codes (frontend)
+	extern "C" DLL_PUBLIC const int IMAGE_OK;
+	extern "C" DLL_PUBLIC const int IMAGE_NOT_FOUND;
+	extern "C" DLL_PUBLIC const int IMAGE_CORRUPTED;
+	extern "C" DLL_PUBLIC const int IMAGE_DEPTH_UNSUPPORTED;
+	extern "C" DLL_PUBLIC const int IMAGE_FORMAT_UNSUPPORTED;
 
-		// ImageBundle info retrieving (frontend)
-		// Will return NULL on not registered image
-		int getImageId(std::string fileName);
-		std::string getImageFileName(int id);
-		std::string getImageFormat(int id);
-		int getImageColorSpace(int id);
-		size_t getImageWidth(int id);
-		size_t getImageHeight(int id);
-		void* getImageMipmap(int id);
+	// Image registering and retrieving (frontend)
+	extern "C" DLL_PUBLIC int registerImage(std::string fileName);
+	extern "C" DLL_PUBLIC int registerImageP(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap);
 
-		// Load original image from file (backend)
-		Magick::Image* getImage(int id);
-		Magick::Image* getImage(std::string fileName);
-	private:
-		// List of registered images (backend)
-		std::list<ImageInfo*> imgList;
+	// ImageInfo attributes retrieving (frontend)
+	// Will return NULL on not registered image
+	extern "C" DLL_PUBLIC int getImageId(std::string fileName);
+	extern "C" DLL_PUBLIC std::string getImageFileName(int id);
+	extern "C" DLL_PUBLIC std::string getImageFormat(int id);
+	extern "C" DLL_PUBLIC int getImageColorSpace(int id);
+	extern "C" DLL_PUBLIC size_t getImageWidth(int id);
+	extern "C" DLL_PUBLIC size_t getImageHeight(int id);
+	extern "C" DLL_PUBLIC void* getImageMipmap(int id);
 
-		// Create mipmap (backend)
-		Magick::Image* createMipmap(Magick::Image* img);
-		
-		// Private constructor as this is singleon
-		ImageLoader() { };
+	// List of registered images
+	static std::list<ImageInfo*> imgList;
 
-		ImageLoader(ImageLoader const&)		= delete;
-		void operator=(ImageLoader const&)	= delete;
+	// Load original image from file (backend)
+	Magick::Image* getImage(int id);
+	Magick::Image* getImage(std::string fileName);
+
+	// Create mipmap (backend)
+	Magick::Image* createMipmap(Magick::Image* img);		
 };
 
 #endif

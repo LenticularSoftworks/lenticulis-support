@@ -1,47 +1,12 @@
 #include "ImageLoader.h"
 
-// ImageBundle implementation
-ImageInfo::ImageInfo(int id, std::string fileName, std::string format, Magick::ColorspaceType colorSpace, size_t width, size_t height, Magick::Image* mipmap) {
-	this->id = id;
-	this->fileName = fileName;
-	this->format = format;
-	this->colorSpace = colorSpace;
-	this->width = width;
-	this->height = height;
-	this->mipmap = mipmap;
-}
+const int ImageLoader::MIPMAP_SIZE = 768;
 
-int ImageInfo::getId() {
-	return this->id;
-}
-
-std::string ImageInfo::getFileName() {
-	return this->fileName;
-}
-
-std::string ImageInfo::getFormat() {
-	return this->format;
-}
-
-Magick::ColorspaceType ImageInfo::getColorSpace() {
-	return this->colorSpace;
-}
-
-size_t ImageInfo::getWidth() {
-	return this->width;
-}
-
-size_t ImageInfo::getHeight() {
-	return this->height;
-}
-
-Magick::Image* ImageInfo::getMipmap() {
-	return this->mipmap;
-}
-
-void ImageInfo::setFileName(std::string fileName) {
-	this->fileName = fileName;
-}
+const int IMAGE_OK = 1;
+const int IMAGE_NOT_FOUND = 2;
+const int IMAGE_CORRUPTED = 3;
+const int IMAGE_DEPTH_UNSUPPORTED = 4;
+const int IMAGE_FORMAT_UNSUPPORTED = 5;
 
 // ImageLoader implementation
 int ImageLoader::registerImage(std::string fileName) {
@@ -49,7 +14,7 @@ int ImageLoader::registerImage(std::string fileName) {
 	return 0;
 }
 
-int registerImage(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
+int registerImageP(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
 	// TODO
 	return 0;
 }
@@ -125,8 +90,4 @@ Magick::Image* ImageLoader::createMipmap(Magick::Image* img_ptr) {
 	}
 
 	return mmap_ptr;
-}
-
-int main() {
-	return EXIT_SUCCESS;
 }
