@@ -50,15 +50,20 @@ namespace ImageLoader {
  	 *
  	 */
 
-	// Configuration constants (frontend/backend)
-	extern "C" DLL_PUBLIC const int MIPMAP_SIZE;
+	// Mipmap configuration constant
+	extern const int MIPMAP_SIZE;
 
-	// Constants defining return codes (frontend)
-	extern "C" DLL_PUBLIC const int IMAGE_OK;
-	extern "C" DLL_PUBLIC const int IMAGE_NOT_FOUND;
-	extern "C" DLL_PUBLIC const int IMAGE_CORRUPTED;
-	extern "C" DLL_PUBLIC const int IMAGE_DEPTH_UNSUPPORTED;
-	extern "C" DLL_PUBLIC const int IMAGE_FORMAT_UNSUPPORTED;
+	// Enumerator of image registration return codes
+	enum RegisterCode {
+		IMAGE_OK = 0,
+		IMAGE_NOT_FOUND,
+		IMAGE_CORRUPTED,
+		IMAGE_DEPTH_UNSUPPORTED,
+		IMAGE_FORMAT_UNSUPPORTED 
+	};
+
+	// Return currently configured size of mipmap
+	extern "C" DLL_PUBLIC int getMipmapSize();
 
 	// Image registering and retrieving (frontend)
 	extern "C" DLL_PUBLIC int registerImage(char* fileName);

@@ -4,23 +4,20 @@
 
 const int ImageLoader::MIPMAP_SIZE = 768;
 
-const int IMAGE_OK = 1;
-const int IMAGE_NOT_FOUND = 2;
-const int IMAGE_CORRUPTED = 3;
-const int IMAGE_DEPTH_UNSUPPORTED = 4;
-const int IMAGE_FORMAT_UNSUPPORTED = 5;
-
 // ImageLoader implementation
+int ImageLoader::getMipmapSize() {
+	return ImageLoader::MIPMAP_SIZE;
+}
+
 int ImageLoader::registerImage(char* fileName) {
 	// TODO
 	return 0;
 }
 
-int registerImageP(char* fileName, char** format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
+int ImageLoader::registerImageP(char* fileName, char** format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap) {
 	// TODO
 	return 0;
 }
-
 
 int ImageLoader::getImageId(char* fileName) {
 	// TODO
