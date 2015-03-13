@@ -46,47 +46,58 @@ void ImageInfo::setFileName(std::string fileName) {
 // ImageLoader implementation
 int ImageLoader::registerImage(std::string fileName) {
 	// TODO
+	return 0;
 }
 
 int registerImage(std::string fileName, std::string* format, int* colorSpace, size_t* width, size_t* height, void* mipmap ) {
 	// TODO
+	return 0;
 }
 
 
 int ImageLoader::getImageId(std::string fileName) {
 	// TODO
+	return 0;
 }
 
 std::string ImageLoader::getImageFileName(int id) {
 	// TODO
+	return "";
 }
 
 std::string ImageLoader::getImageFormat(int id) {
 	// TODO
+	return "";
 }
 
 int ImageLoader::getImageColorSpace(int id) {
 	// TODO
+	return 0;
 }
 
 size_t ImageLoader::getImageWidth(int id) {
 	// TODO
+	return 0;
 }
 
 size_t ImageLoader::getImageHeight(int id) {
 	// TODO
+	return 0;
 }
 
 void* ImageLoader::getImageMipmap(int id) {
 	// TODO
+	return nullptr;
 }
 
 Magick::Image* ImageLoader::getImage(int id) {
 	// TODO
+	return nullptr;
 }
 
 Magick::Image* ImageLoader::getImage(std::string fileName) {
 	// TODO
+	return nullptr;
 }
 
 Magick::Image* ImageLoader::createMipmap(Magick::Image* img_ptr) {
