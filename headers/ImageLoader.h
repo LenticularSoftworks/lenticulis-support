@@ -53,19 +53,20 @@ namespace ImageLoader {
 	// Mipmap configuration constant
 	extern const int MIPMAP_SIZE;
 
-	// Enumerator of image registration return codes
-	enum RegisterCode {
-		IMAGE_OK = 0,
-		IMAGE_NOT_FOUND,
-		IMAGE_CORRUPTED,
-		IMAGE_DEPTH_UNSUPPORTED,
-		IMAGE_FORMAT_UNSUPPORTED 
+	// Enumerator of error image registration return codes
+	enum RegisterErrorCode {
+		IMAGE_NOT_FOUND = -1,
+		IMAGE_CORRUPTED = -2,
+		IMAGE_DEPTH_UNSUPPORTED = -3,
+		IMAGE_FORMAT_UNSUPPORTED = -4
 	};
 
 	// Return currently configured size of mipmap
 	extern "C" DLL_PUBLIC int getMipmapSize();
 
 	// Image registering and retrieving (frontend)
+	// On successful image registration returns positive value representing registered image's id
+	// On failed image registration returns negative value representing error code
 	extern "C" DLL_PUBLIC int registerImage(char* fileName);
 	extern "C" DLL_PUBLIC int registerImageP(char* fileName, char* format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap);
 
