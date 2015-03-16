@@ -67,7 +67,7 @@ namespace ImageLoader {
 
 	// Image registering and retrieving (frontend)
 	extern "C" DLL_PUBLIC int registerImage(char* fileName);
-	extern "C" DLL_PUBLIC int registerImageP(char* fileName, char** format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap);
+	extern "C" DLL_PUBLIC int registerImageP(char* fileName, char* format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap);
 
 	// ImageInfo attributes retrieving (frontend)
 	// Will return NULL on not registered image

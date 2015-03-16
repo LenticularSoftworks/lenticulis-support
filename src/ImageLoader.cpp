@@ -14,7 +14,7 @@ int ImageLoader::registerImage(char* fileName) {
 	return 0;
 }
 
-int ImageLoader::registerImageP(char* fileName, char** format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap) {
+int ImageLoader::registerImageP(char* fileName, char* format, int* colorSpace, unsigned int* width, unsigned int* height, void* mipmap) {
 	// TODO
 	return 0;
 }
