@@ -2,7 +2,9 @@
 
 using namespace ImageLoader;
 
-ImageInfo::ImageInfo(int id, std::string fileName, std::string format, Magick::ColorspaceType colorSpace, size_t width, size_t height, Magick::Image* mipmap) {
+// Simple crate to store image id, filename, format, colorSpace (Magick::ColorSpace), width, height and mipmap
+// Except mipmap, all sttributes representing attributes of original image
+ImageInfo::ImageInfo(int id, char* fileName, char* format, int colorSpace, unsigned int width, unsigned int height, unsigned int* mipmap) {
         this->id = id;
         this->fileName = fileName;
         this->format = format;
@@ -12,34 +14,39 @@ ImageInfo::ImageInfo(int id, std::string fileName, std::string format, Magick::C
         this->mipmap = mipmap;
 }
 
+ImageInfo::~ImageInfo() {
+	delete[] format;
+	delete[] mipmap;
+}
+
 int ImageInfo::getId() {
         return this->id;
 }
 
-std::string ImageInfo::getFileName() {
+char* ImageInfo::getFileName() {
         return this->fileName;
 }
 
-std::string ImageInfo::getFormat() {
+char* ImageInfo::getFormat() {
         return this->format;
 }
 
-Magick::ColorspaceType ImageInfo::getColorSpace() {
+int ImageInfo::getColorSpace() {
         return this->colorSpace;
 }
 
-size_t ImageInfo::getWidth() {
+unsigned int ImageInfo::getWidth() {
         return this->width;
 }
 
-size_t ImageInfo::getHeight() {
+unsigned int ImageInfo::getHeight() {
         return this->height;
 }
 
-Magick::Image* ImageInfo::getMipmap() {
+unsigned int* ImageInfo::getMipmap() {
         return this->mipmap;
 }
 
-void ImageInfo::setFileName(std::string fileName) {
+void ImageInfo::setFileName(char* fileName) {
         this->fileName = fileName;
 }
