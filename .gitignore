@@ -1,2 +1,5 @@
-#YouCompleteMe configuration files
+# YouCompleteMe configuration files
 .ycm_extra_conf.*
+
+# Syntastic configuration files
+.syntastic_cpp_config
