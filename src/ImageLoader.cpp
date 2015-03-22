@@ -35,7 +35,7 @@ int ImageLoader::registerImage(char* fileName) {
 	}	
 
 	// Get ImageInfo attributes
-	int id = ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
+	int id = (int) ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
 	char* format = new char[img_p->magick().length() + 1];
 	std::strcpy(format, img_p->magick().c_str());
 	int colorSpace = (int)(img_p->colorSpace());
@@ -193,7 +193,7 @@ unsigned int* ImageLoader::createMipmap(Magick::Image* img_p) {
 
 	// Propagate all changes to mipmap
 	mmap_p->syncPixels();
-	mempcpy(mmap_data, mmap_p->getPixels(0, 0, MIPMAP_SIZE * 3/2, MIPMAP_SIZE), mmap_s_size);
+	memcpy(mmap_data, mmap_p->getPixels(0, 0, MIPMAP_SIZE * 3/2, MIPMAP_SIZE), mmap_s_size);
 
 	// Delete created mipmap image as we need only pure pixel data
 	delete mmap_p;
