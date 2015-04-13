@@ -34,7 +34,6 @@ int ImageLoader::registerImage(char* fileName) {
 		return ImageLoader::RegisterErrorCode::IMAGE_NOT_FOUND;
 	}
 
-	Magick::Image;
 	// Get ImageInfo attributes
 	int id = (int) ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
 	char* format = new char[img_p->magick().length() + 1];
