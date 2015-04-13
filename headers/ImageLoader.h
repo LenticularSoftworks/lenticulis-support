@@ -29,7 +29,7 @@ namespace ImageLoader {
 			void setFileName(char* fileName);
 
 			// Constructor
-			ImageInfo(	int id, 
+			ImageInfo(	int id,
 					char* fileName,
 					char* format,
 					int colorSpace,
@@ -100,7 +100,7 @@ namespace ImageLoader {
 	Magick::Image* getImage(std::string fileName);
 
 	// Create mipmap
-	unsigned int* createMipmap(Magick::Image* img);		
+	unsigned int* createMipmap(Magick::Image* img);
 };
 
 #endif

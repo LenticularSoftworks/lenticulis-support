@@ -16,7 +16,7 @@ int ImageLoader::getMipmapSize() {
 void ImageLoader::initializeMagick() {
 	Magick::InitializeMagick(nullptr);
 
-        Magick::ResourceLimits::map(4294967296);	// Assume 32bit architecture and set this to 4GB
+	Magick::ResourceLimits::map(4294967296);	// Assume 32bit architecture and set this to 4GB
 	Magick::ResourceLimits::memory(4294967296);
 }
 
@@ -32,8 +32,9 @@ int ImageLoader::registerImage(char* fileName) {
 	} catch ( Magick::ErrorBlob &error ) {					// TODO specific exception handling
 		std::cerr << "Error: " << error.what() << std::endl;
 		return ImageLoader::RegisterErrorCode::IMAGE_NOT_FOUND;
-	}	
+	}
 
+	Magick::Image;
 	// Get ImageInfo attributes
 	int id = (int) ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
 	char* format = new char[img_p->magick().length() + 1];
@@ -65,7 +66,7 @@ int ImageLoader::registerImageP(char* fileName, char* format, int* colorSpace, u
 	}
 
 	// Get ImageInfo object
-	ImageLoader::ImageInfo* img_info = ImageLoader::findImageInfo(id);	
+	ImageLoader::ImageInfo* img_info = ImageLoader::findImageInfo(id);
 
 	// Fill attributes given given as parameters with image attributes
 	sprintf(format, "%s", img_info->getFormat());
@@ -77,16 +78,16 @@ int ImageLoader::registerImageP(char* fileName, char* format, int* colorSpace, u
 	return id;
 }
 
-// Return id of registered image with filename given as parameter, returns 0 on 
+// Return id of registered image with filename given as parameter, returns 0 on
 // not registered image
 int ImageLoader::getImageId(char* fileName) {
 	for ( ImageLoader::ImageInfo* img_info : ImageLoader::imgList ) {
-                if ( strcmp(img_info->getFileName(), fileName) ) {
-                        return img_info->getId();
-                }
-        }
+		if ( strcmp(img_info->getFileName(), fileName) ) {
+			return img_info->getId();
+		}
+	}
 
-        return 0;
+	return 0;
 }
 
 // Return filename of registered image with id given as parameter
@@ -98,38 +99,38 @@ char* ImageLoader::getImageFileName(int id) {
 // Return format of registered image with id given as parameter
 char* ImageLoader::getImageFormat(int id) {
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
-        return img_info ? img_info->getFormat() : nullptr;
+	return img_info ? img_info->getFormat() : nullptr;
 }
 
 // Return colorspace of registered image with id given as parameter
 int ImageLoader::getImageColorSpace(int id) {
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
-        return img_info ? img_info->getColorSpace() : -1;
+	return img_info ? img_info->getColorSpace() : -1;
 }
 
 // Return width of registered image with id given as parameter
 unsigned int ImageLoader::getImageWidth(int id) {
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
-        return img_info ? img_info->getWidth() : 0;
+	return img_info ? img_info->getWidth() : 0;
 }
 
 // Return height of registered image with id given as parameter
 unsigned int ImageLoader::getImageHeight(int id) {
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
-        return img_info ? img_info->getHeight() : 0;
+	return img_info ? img_info->getHeight() : 0;
 }
 
 // Return mipmap of registered image with id given as parameter
 unsigned int* ImageLoader::getImageMipmap(int id) {
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
-        return img_info ? img_info->getMipmap() : nullptr;
+	return img_info ? img_info->getMipmap() : nullptr;
 }
 
 // Destroys all registered images
 void ImageLoader::clearRegisteredImages() {
 	for ( ImageLoader::ImageInfo* img_info : ImageLoader::imgList ) {
 		delete img_info;
-        }
+	}
 
 	ImageLoader::imgList.clear();
 }
@@ -152,9 +153,9 @@ Magick::Image* ImageLoader::getImage(int id) {
 
 	if (!img_info) {
 		return nullptr;
-	}	
+	}
 
-        Magick::Image* img_p = new Magick::Image(img_info->getFileName());
+	Magick::Image* img_p = new Magick::Image(img_info->getFileName());
 	return img_p;
 }
 
@@ -166,7 +167,7 @@ Magick::Image* ImageLoader::getImage(std::string fileName) {
 
 // Return pure pixel data of mipmap based on Magick::Image object given as parameter
 unsigned int* ImageLoader::createMipmap(Magick::Image* img_p) {
-	size_t x_pos = 0, y_pos = 0;							// 
+	size_t x_pos = 0, y_pos = 0;
 	int x_size = MIPMAP_SIZE, y_size = MIPMAP_SIZE;
 	size_t mmap_s_size = MIPMAP_SIZE * MIPMAP_SIZE * 3/2 * sizeof(unsigned int);
 	unsigned int* mmap_data = new unsigned int[mmap_s_size];
@@ -181,14 +182,14 @@ unsigned int* ImageLoader::createMipmap(Magick::Image* img_p) {
 
 		// Resize current image and composite it to mipmap
 		img_p->scale(size_str);
-		mmap_p->composite(*img_p, x_pos, y_pos);	
+		mmap_p->composite(*img_p, x_pos, y_pos);
 
 		// Update col only on first loop, 
 		// update row on all loops except first
 		x_pos = x_size == MIPMAP_SIZE ? img_p->columns() : x_pos;
 		y_pos = y_size == MIPMAP_SIZE ? 0 : y_pos + img_p->rows();
 	
-		x_size /= 2, y_size /= 2;					
+		x_size /= 2, y_size /= 2;
 	}
 
 	// Propagate all changes to mipmap
