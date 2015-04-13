@@ -57,7 +57,7 @@ int ImageProcessor::compositeImage(unsigned int x_pos, unsigned int y_pos) {
 		return ImageProcessor::ProcessReturnCodes::PROCESS_CANVAS_NOT_INITIALIZED;
 	}
 
-	ImageProcessor::canvas->composite(*curr, x_pos, y_pos);
+	ImageProcessor::canvas->composite(*curr, x_pos, y_pos, Magick::CompositeOperator::OverCompositeOp);
 	ImageProcessor::canvas->syncPixels();
 	return ImageProcessor::ProcessReturnCodes::PROCESS_OK;
 }
