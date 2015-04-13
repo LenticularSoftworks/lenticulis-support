@@ -148,10 +148,12 @@
   <ItemGroup>
     <ClCompile Include="..\src\ImageInfo.cpp" />
     <ClCompile Include="..\src\ImageLoader.cpp" />
+    <ClCompile Include="..\src\ImageProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Defs.h" />
     <ClInclude Include="..\headers\ImageLoader.h" />
+    <ClInclude Include="..\headers\ImageProcessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

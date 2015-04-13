@@ -17,12 +17,18 @@
     <ClCompile Include="..\src\ImageInfo.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ImageProcessor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\ImageLoader.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Defs.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ImageProcessor.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
