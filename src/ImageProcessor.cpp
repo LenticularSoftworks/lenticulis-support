@@ -70,5 +70,6 @@ int ImageProcessor::exportCanvas(char* filename, unsigned char quality) {
 	ImageProcessor::canvas->quality(quality);
 	ImageProcessor::canvas->write(filename);
 
+	delete ImageProcessor::canvas;
 	return ImageProcessor::ProcessReturnCodes::PROCESS_OK;
 }
