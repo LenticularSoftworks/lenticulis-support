@@ -20,6 +20,37 @@ void ImageLoader::initializeMagick() {
 	Magick::ResourceLimits::memory(4294967296);
 }
 
+// Retrieve PSD format layer information such as number of layers
+// and labels for each layer in single string delimited by ';' char
+int ImageLoader::getLayerInfo(char* filename, char* labels) {
+	Magick::Image img;
+	std::string tmp_name;
+	std::string tmp_labels = "";
+
+	// TODO - Extract layer data from file more effectively as this way loads whole file for each layer
+	int i = 0;
+	while (true) {
+		try {
+			tmp_name = std::string(filename) + std::string("[") +
+					std::to_string(i + 1) + std::string("]");
+			img.read(tmp_name), i++;
+			tmp_labels += std::string(img.label()) + std::string(";");
+
+			// As we support layers only on PSD files, return 1 on other formats
+			// explicitly, otherwise this method become infinite loop
+			if (std::strcmp(img.magick().c_str(), "PSD")) {
+				return 1;
+			}
+
+		} catch ( Magick::Error &error ) {
+			break;
+		}
+	}
+
+	std::strcpy(labels, tmp_labels.c_str());
+	return i;
+}
+
 // Image registration function, registers image to backend
 // and returns it's id, if image registration fails, returns 
 // negative value representing specific error code

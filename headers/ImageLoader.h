@@ -70,6 +70,9 @@ namespace ImageLoader {
 	// Initialize ImageMagick
 	extern "C" DLL_PUBLIC void initializeMagick();
 
+	// Get PSD image layer info such as layer count and layer labels
+	extern "C" DLL_PUBLIC int getLayerInfo(char* filename, char* labels);
+
 	// Image registering and retrieving
 	// On successful image registration returns positive value representing registered image's id
 	// On failed image registration returns negative value representing error code
