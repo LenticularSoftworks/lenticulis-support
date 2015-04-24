@@ -6,7 +6,8 @@ using namespace ImageLoader;
 // Except mipmap, all sttributes representing attributes of original image
 ImageInfo::ImageInfo(int id, char* fileName, char* format, int colorSpace, unsigned int width, unsigned int height, unsigned int* mipmap) {
 	this->id = id;
-	this->fileName = fileName;
+	this->fileName = new char[strlen(fileName)];
+	strcpy(this->fileName, fileName);
 	this->format = format;
 	this->colorSpace = colorSpace;
 	this->width = width;
