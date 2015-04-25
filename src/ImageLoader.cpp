@@ -16,8 +16,10 @@ int ImageLoader::getMipmapSize() {
 void ImageLoader::initializeMagick() {
 	Magick::InitializeMagick(nullptr);
 
+#ifdef _M_AMD64
 	Magick::ResourceLimits::map(4294967296);	// Assume 32bit architecture and set this to 4GB
 	Magick::ResourceLimits::memory(4294967296);
+#endif
 }
 
 // Retrieve PSD format layer information such as number of layers
