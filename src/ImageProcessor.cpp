@@ -48,7 +48,7 @@ int ImageProcessor::rotateImage(double deg) {
 	return ImageProcessor::ProcessReturnCodes::PROCESS_OK;
 }
 
-int ImageProcessor::compositeImage(unsigned int x_pos, unsigned int y_pos) {
+int ImageProcessor::compositeImage(int x_pos, int y_pos) {
 
 	// Check if some image is loaded
 	if (!ImageProcessor::curr) {

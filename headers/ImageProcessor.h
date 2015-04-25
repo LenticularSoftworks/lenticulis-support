@@ -34,7 +34,7 @@ namespace ImageProcessor {
 	extern "C" DLL_PUBLIC int rotateImage(double deg);
 
 	// Composite currently loaded image onto canvas
-	extern "C" DLL_PUBLIC int compositeImage(unsigned int x_pos, unsigned int y_pos);
+	extern "C" DLL_PUBLIC int compositeImage(int x_pos, int y_pos);
 
 	// Free currently loaded image
 	extern "C" DLL_PUBLIC void finalizeImage();
