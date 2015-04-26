@@ -36,7 +36,12 @@ int ImageLoader::getLayerInfo(char* filename, char* labels) {
 			tmp_name = std::string(filename) + std::string("[") +
 					std::to_string(i + 1) + std::string("]");
 			img.read(tmp_name), i++;
-			tmp_labels += std::string(img.label()) + std::string(";");
+
+			if ( !i && std::strcmp(img.label().c_str(), "") ) {
+				tmp_labels += std::string(img.label()) + std::string(";");
+			} else {
+				return 1;
+			}
 
 			// As we support layers only on PSD files, return 1 on other formats
 			// explicitly, otherwise this method become infinite loop
@@ -58,13 +63,17 @@ int ImageLoader::getLayerInfo(char* filename, char* labels) {
 // negative value representing specific error code
 int ImageLoader::registerImage(char* fileName) {
 	ImageLoader::ImageInfo* img_info;
-	Magick::Image* img_p;
+	Magick::Image* img_p = new Magick::Image();
 
 	try {
-		img_p = new Magick::Image(fileName);
+		img_p->read(fileName);
 	} catch ( Magick::ErrorBlob &error ) {					// TODO specific exception handling
+		delete img_p;
 		std::cerr << "Error: " << error.what() << std::endl;
 		return ImageLoader::RegisterErrorCode::IMAGE_NOT_FOUND;
+	} catch ( Magick::ErrorCoder &error ) {
+		// Literally no reaction to this exception as this mostly means TIFF warnings and errors but image
+		// is still loaded correctly, so we can ignore them
 	}
 
 	// Get ImageInfo attributes
@@ -181,13 +190,21 @@ ImageLoader::ImageInfo* ImageLoader::findImageInfo(int id) {
 // Return original Magick::Image object of registered image with id 
 // given as parameter
 Magick::Image* ImageLoader::getImage(int id) {
+	Magick::Image* img_p = new Magick::Image();
 	ImageInfo* img_info = ImageLoader::findImageInfo(id);
 
 	if (!img_info) {
+		delete img_p;
 		return nullptr;
 	}
 
-	Magick::Image* img_p = new Magick::Image(img_info->getFileName());
+	try {
+		img_p->read(img_info->getFileName());
+	} catch ( Magick::ErrorCoder &error ) {
+		// Literally no reaction to this exception as this mostly means TIFF warnings and errors but image
+		// is still loaded correctly, so we can ignore them
+	}
+
 	return img_p;
 }
 
