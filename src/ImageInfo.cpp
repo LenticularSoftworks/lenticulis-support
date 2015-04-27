@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "ImageLoader.h"
 
 using namespace ImageLoader;
