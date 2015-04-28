@@ -57,6 +57,10 @@ int ImageProcessor::compositeImage(int x_pos, int y_pos) {
 		return ImageProcessor::ProcessReturnCodes::PROCESS_CANVAS_NOT_INITIALIZED;
 	}
 
+	// Recalculate position as parameters are position of center
+	x_pos -= ( ImageProcessor::curr->columns() / 2 );
+	y_pos -= ( ImageProcessor::curr->rows() / 2 );
+
 	ImageProcessor::canvas->composite(*curr, x_pos, y_pos, Magick::CompositeOperator::OverCompositeOp);
 	ImageProcessor::canvas->syncPixels();
 	return ImageProcessor::ProcessReturnCodes::PROCESS_OK;
