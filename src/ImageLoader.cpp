@@ -37,7 +37,7 @@ int ImageLoader::getLayerInfo(char* filename, char* labels) {
 					std::to_string(i + 1) + std::string("]");
 			img.read(tmp_name), i++;
 
-			if ( !i && std::strcmp(img.label().c_str(), "") ) {
+			if ( !i || img.label().length() ) {
 				tmp_labels += std::string(img.label()) + std::string(";");
 			} else {
 				return 1;
