@@ -5,8 +5,6 @@
 
 const int ImageLoader::MIPMAP_SIZE = 768;
 
-// ImageLoader implementation
-
 // Export MIPMAP_SIZE constant via function
 int ImageLoader::getMipmapSize() {
 	return ImageLoader::MIPMAP_SIZE;
@@ -63,34 +61,45 @@ int ImageLoader::getLayerInfo(char* filename, char* labels) {
 // negative value representing specific error code
 int ImageLoader::registerImage(char* fileName) {
 	ImageLoader::ImageInfo* img_info;
-	Magick::Image* img_p = new Magick::Image();
+	Magick::Image img;
 
 	try {
-		img_p->read(fileName);
-	} catch ( Magick::ErrorBlob &error ) {					// TODO specific exception handling
-		delete img_p;
+		img.read(fileName);
+
+		if ( img.depth() != QUANTUM_DEPTH ) {
+			std::cerr << "Error: Unsupported quantum depth" << std::endl;
+			return ImageLoader::RegisterErrorCode::IMAGE_DEPTH_UNSUPPORTED;
+		}
+
+	} catch ( Magick::ErrorBlob &error ) {
 		std::cerr << "Error: " << error.what() << std::endl;
 		return ImageLoader::RegisterErrorCode::IMAGE_NOT_FOUND;
+	} catch ( Magick::ErrorDelegate &error ) {
+		std::cerr << "Error: " << error.what() << std::endl;
+		return ImageLoader::RegisterErrorCode::IMAGE_FORMAT_UNSUPPORTED;
+	} catch ( Magick::ErrorCorruptImage &error ) {
+		std::cerr << "Error: " << error.what() << std::endl;
+		return ImageLoader::RegisterErrorCode::IMAGE_CORRUPTED;
 	} catch ( Magick::ErrorCoder &error ) {
 		// Literally no reaction to this exception as this mostly means TIFF warnings and errors but image
 		// is still loaded correctly, so we can ignore them
+	} catch ( Magick::Error &error ) {
+		std::cerr << "Error: " << error.what() << std::endl;
+		return ImageLoader::RegisterErrorCode::IMAGE_UNKNOWN_ERROR;
 	}
 
 	// Get ImageInfo attributes
 	int id = (int) ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
-	char* format = new char[img_p->magick().length() + 1];
-	std::strcpy(format, img_p->magick().c_str());
-	int colorSpace = (int)(img_p->colorSpace());
-	unsigned int width = (unsigned int)(img_p->columns());
-	unsigned int height = (unsigned int)(img_p->rows());
-	unsigned int* mipmap = ImageLoader::createMipmap(img_p);
+	char* format = new char[img.magick().length() + 1];
+	std::strcpy(format, img.magick().c_str());
+	int colorSpace = (int)(img.colorSpace());
+	unsigned int width = (unsigned int)(img.columns());
+	unsigned int height = (unsigned int)(img.rows());
+	unsigned int* mipmap = ImageLoader::createMipmap(img);
 
 	// Create and register ImageInfo crate
 	img_info = new ImageLoader::ImageInfo(id, fileName, format, colorSpace, width, height, mipmap);
 	ImageLoader::imgList.push_front(img_info);
-
-	// Delete loaded original image as we need only ImageInfo crate which is already created
-	delete img_p;
 
 	// Return id of succesfully registered image
 	return id;
@@ -215,7 +224,7 @@ Magick::Image* ImageLoader::getImage(std::string fileName) {
 }
 
 // Return pure pixel data of mipmap based on Magick::Image object given as parameter
-unsigned int* ImageLoader::createMipmap(Magick::Image* img_p) {
+unsigned int* ImageLoader::createMipmap(Magick::Image img) {
 	size_t x_pos = 0, y_pos = 0;
 	int x_size = MIPMAP_SIZE, y_size = MIPMAP_SIZE;
 	size_t mmap_s_size = MIPMAP_SIZE * MIPMAP_SIZE * 3/2 * sizeof(unsigned int);
@@ -224,29 +233,26 @@ unsigned int* ImageLoader::createMipmap(Magick::Image* img_p) {
 	// Construct initial string, '3/2' constant is safe here as we have fixed mipmap size
 	std::string size_str = std::to_string((int)(x_size * 3/2)) + std::string("x") + std::to_string(y_size);
 
-	Magick::Image* mmap_p = new Magick::Image(size_str, Magick::Color("white"));
+	Magick::Image mmap(size_str, Magick::Color("white"));
 	while (x_size > 0 && y_size > 0) {
 		// Construct new Geometry string
 		size_str = std::to_string(x_size) + std::string("x") + std::to_string(y_size);
 
 		// Resize current image and composite it to mipmap
-		img_p->scale(size_str);
-		mmap_p->composite(*img_p, x_pos, y_pos);
+		img.scale(size_str);
+		mmap.composite(img, x_pos, y_pos);
 
 		// Update col only on first loop, 
 		// update row on all loops except first
-		x_pos = x_size == MIPMAP_SIZE ? img_p->columns() : x_pos;
-		y_pos = y_size == MIPMAP_SIZE ? 0 : y_pos + img_p->rows();
+		x_pos = x_size == MIPMAP_SIZE ? img.columns() : x_pos;
+		y_pos = y_size == MIPMAP_SIZE ? 0 : y_pos + img.rows();
 	
 		x_size /= 2, y_size /= 2;
 	}
 
 	// Propagate all changes to mipmap
-	mmap_p->syncPixels();
-	memcpy(mmap_data, mmap_p->getPixels(0, 0, MIPMAP_SIZE * 3/2, MIPMAP_SIZE), mmap_s_size);
-
-	// Delete created mipmap image as we need only pure pixel data
-	delete mmap_p;
+	mmap.syncPixels();
+	memcpy(mmap_data, mmap.getPixels(0, 0, MIPMAP_SIZE * 3/2, MIPMAP_SIZE), mmap_s_size);
 
 	// Return pure pixel data	
 	return mmap_data;

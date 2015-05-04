@@ -8,6 +8,9 @@
 
 #include "Defs.h"
 
+// Quantum depth ImageMagick is compiled with
+#define QUANTUM_DEPTH 8
+
 namespace ImageLoader {
 
 	/*
@@ -61,7 +64,8 @@ namespace ImageLoader {
 		IMAGE_NOT_FOUND = -1,
 		IMAGE_CORRUPTED = -2,
 		IMAGE_DEPTH_UNSUPPORTED = -3,
-		IMAGE_FORMAT_UNSUPPORTED = -4
+		IMAGE_FORMAT_UNSUPPORTED = -4,
+		IMAGE_UNKNOWN_ERROR = -5
 	};
 
 	// Return currently configured size of mipmap
@@ -103,7 +107,7 @@ namespace ImageLoader {
 	Magick::Image* getImage(std::string fileName);
 
 	// Create mipmap
-	unsigned int* createMipmap(Magick::Image* img);
+	unsigned int* createMipmap(Magick::Image img);
 };
 
 #endif
