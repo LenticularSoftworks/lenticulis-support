@@ -3,6 +3,7 @@
 
 #include "ImageLoader.h"
 
+// Size of largest mipmap element edge
 const int ImageLoader::MIPMAP_SIZE = 768;
 
 // Export MIPMAP_SIZE constant via function
@@ -15,7 +16,7 @@ void ImageLoader::initializeMagick() {
 	Magick::InitializeMagick(nullptr);
 
 #ifdef _M_AMD64
-	Magick::ResourceLimits::map(4294967296);	// Assume 32bit architecture and set this to 4GB
+	Magick::ResourceLimits::map(4294967296);
 	Magick::ResourceLimits::memory(4294967296);
 #endif
 }
@@ -89,7 +90,7 @@ int ImageLoader::registerImage(char* fileName) {
 	}
 
 	// Get ImageInfo attributes
-	int id = (int) ImageLoader::imgList.size() + 1;			// We want to index from 1, not zero
+	int id = (int) ImageLoader::imgList.size() + 1;		// We want to index from 1, not zero
 	char* format = new char[img.magick().length() + 1];
 	std::strcpy(format, img.magick().c_str());
 	int colorSpace = (int)(img.colorSpace());
