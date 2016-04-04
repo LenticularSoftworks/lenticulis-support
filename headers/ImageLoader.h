@@ -96,6 +96,8 @@ namespace ImageLoader {
 	// Destroy all registered images
 	extern "C" DLL_PUBLIC void clearRegisteredImages();
 
+	extern "C" DLL_PUBLIC void destroyImage(int id);
+
 	// List of registered images
 	static std::list<ImageInfo*> imgList;
 

@@ -186,6 +186,18 @@ void ImageLoader::clearRegisteredImages() {
 	ImageLoader::imgList.clear();
 }
 
+// destroy single registered image by its id
+void ImageLoader::destroyImage(int id) {
+	for (ImageLoader::ImageInfo* img_info : ImageLoader::imgList) {
+		if ((img_info->getId()) == id) {
+			imgList.remove(img_info);
+			delete img_info;
+			
+			return;
+		}
+	}
+}
+
 // Return ImageInfo object of registered image with id given as parameter
 ImageLoader::ImageInfo* ImageLoader::findImageInfo(int id) {
 	for ( ImageLoader::ImageInfo* img_info : ImageLoader::imgList ) {
